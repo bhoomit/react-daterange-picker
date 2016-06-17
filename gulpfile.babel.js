@@ -1,4 +1,4 @@
-Object.assign = require('object.assign');
+Object.assign = require('core-js/fn/object/assign');
 
 import fs from 'fs';
 import path from 'path';
@@ -10,6 +10,7 @@ import webpack from 'webpack';
 import { Server as KarmaServer } from 'karma';
 import clean from 'del';
 import runSequence from 'run-sequence';
+import objectAssign from 'core-js/fn/object/assign';
 
 const plugins = gulpLoadPlugins();
 const PRODUCTION = (process.env.NODE_ENV === 'production');
@@ -113,6 +114,7 @@ gulp.task('clean-dist', function() {
 gulp.task('build-dist-js', function() {
   // build javascript files
   return gulp.src(['src/**/*.{js,jsx}', '!src/**/tests/**', '!src/tests.webpack.js'])
+    .pipe(plugins.babel(objectAssign))
     .pipe(plugins.extReplace('.js'))
     .pipe(gulp.dest('dist'));
 });

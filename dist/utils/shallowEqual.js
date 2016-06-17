@@ -1,8 +1,24 @@
-import moment from 'moment';
-import {} from 'moment-range';
-import areMomentRangesEqual from './areMomentRangesEqual';
-import isMomentRange from './isMomentRange';
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
+require('moment-range');
+
+var _areMomentRangesEqual = require('./areMomentRangesEqual');
+
+var _areMomentRangesEqual2 = _interopRequireDefault(_areMomentRangesEqual);
+
+var _isMomentRange = require('./isMomentRange');
+
+var _isMomentRange2 = _interopRequireDefault(_isMomentRange);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function shallowEqual(objA, objB) {
   if (objA === objB) {
@@ -15,18 +31,12 @@ function shallowEqual(objA, objB) {
     if (objA.hasOwnProperty(key)) {
       if (!objB.hasOwnProperty(key)) {
         return false;
-      } else if (
-        moment.isMoment(objA[key]) &&
-        moment.isMoment(objB[key])
-      ) {
+      } else if (_moment2.default.isMoment(objA[key]) && _moment2.default.isMoment(objB[key])) {
         if (!objA[key].isSame(objB[key], 'day')) {
           return false;
         }
-      } else if (
-        isMomentRange(objA[key]) &&
-        isMomentRange(objB[key])
-      ) {
-        if (!areMomentRangesEqual(objA[key], objB[key])) {
+      } else if ((0, _isMomentRange2.default)(objA[key]) && (0, _isMomentRange2.default)(objB[key])) {
+        if (!(0, _areMomentRangesEqual2.default)(objA[key], objB[key])) {
           return false;
         }
       } else if (objA[key] !== objB[key]) {
@@ -44,4 +54,4 @@ function shallowEqual(objA, objB) {
   return true;
 }
 
-export default shallowEqual;
+exports.default = shallowEqual;

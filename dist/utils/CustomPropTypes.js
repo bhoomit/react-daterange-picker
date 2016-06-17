@@ -1,41 +1,52 @@
-import moment from 'moment';
-import {} from 'moment-range';
-import isMomentRange from './isMomentRange';
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-export default {
-  momentOrMomentRange(props, propName) {
-    let val = props[propName];
+var _moment2 = require('moment');
 
-    if (!val) {
-      return null;
-    } else if (moment.isMoment(val)) {
-      return null;
-    } else if (isMomentRange(val)) {
-      return null;
-    }
-    return new Error(`'${propName}' must be a moment or a moment range`);
-  },
+var _moment3 = _interopRequireDefault(_moment2);
 
-  moment(props, propName) {
-    let val = props[propName];
+require('moment-range');
 
-    if (!val) {
-      return null;
-    } else if (moment.isMoment(val)) {
-      return null;
-    }
-    return new Error(`'${propName}' must be a moment`);
-  },
+var _isMomentRange = require('./isMomentRange');
 
-  momentRange(props, propName) {
-    let val = props[propName];
+var _isMomentRange2 = _interopRequireDefault(_isMomentRange);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  momentOrMomentRange: function momentOrMomentRange(props, propName) {
+    var val = props[propName];
 
     if (!val) {
       return null;
-    } else if (isMomentRange(val)) {
+    } else if (_moment3.default.isMoment(val)) {
+      return null;
+    } else if ((0, _isMomentRange2.default)(val)) {
       return null;
     }
-    return new Error(`'${propName}' must be a moment range`);
+    return new Error('\'' + propName + '\' must be a moment or a moment range');
   },
+  moment: function moment(props, propName) {
+    var val = props[propName];
+
+    if (!val) {
+      return null;
+    } else if (_moment3.default.isMoment(val)) {
+      return null;
+    }
+    return new Error('\'' + propName + '\' must be a moment');
+  },
+  momentRange: function momentRange(props, propName) {
+    var val = props[propName];
+
+    if (!val) {
+      return null;
+    } else if ((0, _isMomentRange2.default)(val)) {
+      return null;
+    }
+    return new Error('\'' + propName + '\' must be a moment range');
+  }
 };

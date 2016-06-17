@@ -1,31 +1,46 @@
-import React from 'react';
-import bemCx from './bemCx';
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const BemMixin = {
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _bemCx = require('./bemCx');
+
+var _bemCx2 = _interopRequireDefault(_bemCx);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var BemMixin = {
   propTypes: {
-    bemNamespace: React.PropTypes.string,
-    bemBlock: React.PropTypes.string,
+    bemNamespace: _react2.default.PropTypes.string,
+    bemBlock: _react2.default.PropTypes.string
   },
 
   contextTypes: {
-    bemNamespace: React.PropTypes.string,
-    bemBlock: React.PropTypes.string,
+    bemNamespace: _react2.default.PropTypes.string,
+    bemBlock: _react2.default.PropTypes.string
   },
 
   childContextTypes: {
-    bemNamespace: React.PropTypes.string,
-    bemBlock: React.PropTypes.string,
+    bemNamespace: _react2.default.PropTypes.string,
+    bemBlock: _react2.default.PropTypes.string
   },
 
-  getChildContext() {
+  getChildContext: function getChildContext() {
     return {
       bemNamespace: this.getBemNamespace(),
-      bemBlock: this.getBemBlock(),
+      bemBlock: this.getBemBlock()
     };
   },
-
-  getBemNamespace() {
+  getBemNamespace: function getBemNamespace() {
     if (this.props.bemNamespace) {
       return this.props.bemNamespace;
     }
@@ -34,8 +49,7 @@ const BemMixin = {
     }
     return null;
   },
-
-  getBemBlock() {
+  getBemBlock: function getBemBlock() {
     if (this.props.bemBlock) {
       return this.props.bemBlock;
     }
@@ -44,17 +58,18 @@ const BemMixin = {
     }
     return null;
   },
+  cx: function cx() {
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-  cx(options = {}) {
-    let opts = {
+    var opts = {
       namespace: this.getBemNamespace(),
       element: this.constructor.displayName,
-      block: this.getBemBlock(),
+      block: this.getBemBlock()
     };
 
-    Object.assign(opts, options);
-    return bemCx(opts);
-  },
+    (0, _assign2.default)(opts, options);
+    return (0, _bemCx2.default)(opts);
+  }
 };
 
-export default BemMixin;
+exports.default = BemMixin;
