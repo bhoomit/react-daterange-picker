@@ -1,145 +1,111 @@
-'use strict';
+import React from 'react';
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+import Immutable from 'immutable';
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+import BemMixin from '../utils/BemMixin';
+import CustomPropTypes from '../utils/CustomPropTypes';
+import PureRenderMixin from '../utils/PureRenderMixin';
+import lightenDarkenColor from '../utils/lightenDarkenColor';
 
-var _react = require('react');
+import CalendarDatePeriod from './CalendarDatePeriod';
+import CalendarHighlight from './CalendarHighlight';
+import CalendarSelection from './CalendarSelection';
 
-var _react2 = _interopRequireDefault(_react);
 
-var _immutable = require('immutable');
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _utilsBemMixin = require('../utils/BemMixin');
-
-var _utilsBemMixin2 = _interopRequireDefault(_utilsBemMixin);
-
-var _utilsCustomPropTypes = require('../utils/CustomPropTypes');
-
-var _utilsCustomPropTypes2 = _interopRequireDefault(_utilsCustomPropTypes);
-
-var _utilsPureRenderMixin = require('../utils/PureRenderMixin');
-
-var _utilsPureRenderMixin2 = _interopRequireDefault(_utilsPureRenderMixin);
-
-var _utilsLightenDarkenColor = require('../utils/lightenDarkenColor');
-
-var _utilsLightenDarkenColor2 = _interopRequireDefault(_utilsLightenDarkenColor);
-
-var _CalendarDatePeriod = require('./CalendarDatePeriod');
-
-var _CalendarDatePeriod2 = _interopRequireDefault(_CalendarDatePeriod);
-
-var _CalendarHighlight = require('./CalendarHighlight');
-
-var _CalendarHighlight2 = _interopRequireDefault(_CalendarHighlight);
-
-var _CalendarSelection = require('./CalendarSelection');
-
-var _CalendarSelection2 = _interopRequireDefault(_CalendarSelection);
-
-var CalendarDate = _react2['default'].createClass({
-  displayName: 'CalendarDate',
-
-  mixins: [_utilsBemMixin2['default'], _utilsPureRenderMixin2['default']],
+const CalendarDate = React.createClass({
+  mixins: [BemMixin, PureRenderMixin],
 
   propTypes: {
-    date: _utilsCustomPropTypes2['default'].moment,
+    date: CustomPropTypes.moment,
 
-    firstOfMonth: _react2['default'].PropTypes.object.isRequired,
+    firstOfMonth: React.PropTypes.object.isRequired,
 
-    isSelectedDate: _react2['default'].PropTypes.bool,
-    isSelectedRangeStart: _react2['default'].PropTypes.bool,
-    isSelectedRangeEnd: _react2['default'].PropTypes.bool,
-    isInSelectedRange: _react2['default'].PropTypes.bool,
+    isSelectedDate: React.PropTypes.bool,
+    isSelectedRangeStart: React.PropTypes.bool,
+    isSelectedRangeEnd: React.PropTypes.bool,
+    isInSelectedRange: React.PropTypes.bool,
 
-    isHighlightedDate: _react2['default'].PropTypes.bool,
-    isHighlightedRangeStart: _react2['default'].PropTypes.bool,
-    isHighlightedRangeEnd: _react2['default'].PropTypes.bool,
-    isInHighlightedRange: _react2['default'].PropTypes.bool,
+    isHighlightedDate: React.PropTypes.bool,
+    isHighlightedRangeStart: React.PropTypes.bool,
+    isHighlightedRangeEnd: React.PropTypes.bool,
+    isInHighlightedRange: React.PropTypes.bool,
 
-    highlightedDate: _react2['default'].PropTypes.object,
-    dateStates: _react2['default'].PropTypes.instanceOf(_immutable2['default'].List),
-    isDisabled: _react2['default'].PropTypes.bool,
-    isToday: _react2['default'].PropTypes.bool,
+    highlightedDate: React.PropTypes.object,
+    dateStates: React.PropTypes.instanceOf(Immutable.List),
+    isDisabled: React.PropTypes.bool,
+    isToday: React.PropTypes.bool,
 
-    dateRangesForDate: _react2['default'].PropTypes.func,
-    onHighlightDate: _react2['default'].PropTypes.func,
-    onUnHighlightDate: _react2['default'].PropTypes.func,
-    onSelectDate: _react2['default'].PropTypes.func
+    dateRangesForDate: React.PropTypes.func,
+    onHighlightDate: React.PropTypes.func,
+    onUnHighlightDate: React.PropTypes.func,
+    onSelectDate: React.PropTypes.func,
+    fullDayStates: React.PropTypes.bool,
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState() {
     return {
-      mouseDown: false
+      mouseDown: false,
     };
   },
 
-  mouseUp: function mouseUp() {
+  mouseUp() {
     this.props.onSelectDate(this.props.date);
 
     if (this.state.mouseDown) {
       this.setState({
-        mouseDown: false
+        mouseDown: false,
       });
     }
     document.removeEventListener('mouseup', this.mouseUp);
   },
 
-  mouseDown: function mouseDown() {
+  mouseDown() {
     this.setState({
-      mouseDown: true
+      mouseDown: true,
     });
     document.addEventListener('mouseup', this.mouseUp);
   },
 
-  touchEnd: function touchEnd() {
+  touchEnd() {
     this.props.onHighlightDate(this.props.date);
     this.props.onSelectDate(this.props.date);
 
     if (this.state.mouseDown) {
       this.setState({
-        mouseDown: false
+        mouseDown: false,
       });
     }
     document.removeEventListener('touchend', this.touchEnd);
   },
 
-  touchStart: function touchStart(event) {
+  touchStart(event) {
     event.preventDefault();
     this.setState({
-      mouseDown: true
+      mouseDown: true,
     });
     document.addEventListener('touchend', this.touchEnd);
   },
 
-  mouseEnter: function mouseEnter() {
+  mouseEnter() {
     this.props.onHighlightDate(this.props.date);
   },
 
-  mouseLeave: function mouseLeave() {
+  mouseLeave() {
     if (this.state.mouseDown) {
       this.props.onSelectDate(this.props.date);
 
       this.setState({
-        mouseDown: false
+        mouseDown: false,
       });
     }
     this.props.onUnHighlightDate(this.props.date);
   },
 
-  getBemModifiers: function getBemModifiers() {
-    var _props = this.props;
-    var date = _props.date;
-    var firstOfMonth = _props.firstOfMonth;
-    var today = _props.isToday;
+  getBemModifiers() {
+    let {date, firstOfMonth, isToday: today} = this.props;
 
-    var otherMonth = false;
-    var weekend = false;
+    let otherMonth = false;
+    let weekend = false;
 
     if (date.month() !== firstOfMonth.month()) {
       otherMonth = true;
@@ -149,51 +115,54 @@ var CalendarDate = _react2['default'].createClass({
       weekend = true;
     }
 
-    return { today: today, weekend: weekend, otherMonth: otherMonth };
+    return {today, weekend, otherMonth};
   },
 
-  getBemStates: function getBemStates() {
-    var _props2 = this.props;
-    var isSelectedDate = _props2.isSelectedDate;
-    var isInSelectedRange = _props2.isInSelectedRange;
-    var isInHighlightedRange = _props2.isInHighlightedRange;
-    var highlighted = _props2.isHighlightedDate;
-    var disabled = _props2.isDisabled;
+  getBemStates() {
+    let {
+      isSelectedDate,
+      isInSelectedRange,
+      isInHighlightedRange,
+      isHighlightedDate: highlighted,
+      isDisabled: disabled,
+    } = this.props;
 
-    var selected = isSelectedDate || isInSelectedRange || isInHighlightedRange;
+    let selected = isSelectedDate || isInSelectedRange || isInHighlightedRange;
 
-    return { disabled: disabled, highlighted: highlighted, selected: selected };
+    return {disabled, highlighted, selected};
   },
 
-  render: function render() {
-    var _props3 = this.props;
-    var date = _props3.date;
-    var dateRangesForDate = _props3.dateRangesForDate;
-    var isSelectedDate = _props3.isSelectedDate;
-    var isSelectedRangeStart = _props3.isSelectedRangeStart;
-    var isSelectedRangeEnd = _props3.isSelectedRangeEnd;
-    var isInSelectedRange = _props3.isInSelectedRange;
-    var isHighlightedDate = _props3.isHighlightedDate;
-    var isHighlightedRangeStart = _props3.isHighlightedRangeStart;
-    var isHighlightedRangeEnd = _props3.isHighlightedRangeEnd;
-    var isInHighlightedRange = _props3.isInHighlightedRange;
+  render() {
+    let {
+      date,
+      dateRangesForDate,
+      isSelectedDate,
+      isSelectedRangeStart,
+      isSelectedRangeEnd,
+      isInSelectedRange,
+      isHighlightedDate,
+      isHighlightedRangeStart,
+      isHighlightedRangeEnd,
+      isInHighlightedRange,
+    } = this.props;
 
-    var bemModifiers = this.getBemModifiers();
-    var bemStates = this.getBemStates();
-    var pending = isInHighlightedRange;
+    let bemModifiers = this.getBemModifiers();
+    let bemStates = this.getBemStates();
+    let pending = isInHighlightedRange;
 
-    var color = undefined;
-    var amColor = undefined;
-    var pmColor = undefined;
-    var states = dateRangesForDate(date);
-    var numStates = states.count();
-    var cellStyle = {};
-    var style = {};
+    let color;
+    let amColor;
+    let pmColor;
+    let states = dateRangesForDate(date);
+    let numStates = states.count();
+    let cellStyle = {};
+    let style = {};
 
-    var highlightModifier = undefined;
-    var selectionModifier = undefined;
+    let highlightModifier;
+    let selectionModifier;
 
-    if (isSelectedDate || isSelectedRangeStart && isSelectedRangeEnd || isHighlightedRangeStart && isHighlightedRangeEnd) {
+    if (isSelectedDate || (isSelectedRangeStart && isSelectedRangeEnd)
+        || (isHighlightedRangeStart && isHighlightedRangeEnd)) {
       selectionModifier = 'single';
     } else if (isSelectedRangeStart || isHighlightedRangeStart) {
       selectionModifier = 'start';
@@ -207,18 +176,18 @@ var CalendarDate = _react2['default'].createClass({
       highlightModifier = 'single';
     }
 
-    if (numStates === 1) {
+    if (this.props.fullDayStates || numStates === 1) {
       // If there's only one state, it means we're not at a boundary
       color = states.getIn([0, 'color']);
 
       if (color) {
 
         style = {
-          backgroundColor: color
+          backgroundColor: color,
         };
         cellStyle = {
-          borderLeftColor: (0, _utilsLightenDarkenColor2['default'])(color, -10),
-          borderRightColor: (0, _utilsLightenDarkenColor2['default'])(color, -10)
+          borderLeftColor: lightenDarkenColor(color, -10),
+          borderRightColor: lightenDarkenColor(color, -10),
         };
       }
     } else {
@@ -226,39 +195,34 @@ var CalendarDate = _react2['default'].createClass({
       pmColor = states.getIn([1, 'color']);
 
       if (amColor) {
-        cellStyle.borderLeftColor = (0, _utilsLightenDarkenColor2['default'])(amColor, -10);
+        cellStyle.borderLeftColor = lightenDarkenColor(amColor, -10);
       }
 
       if (pmColor) {
-        cellStyle.borderRightColor = (0, _utilsLightenDarkenColor2['default'])(pmColor, -10);
+        cellStyle.borderRightColor = lightenDarkenColor(pmColor, -10);
       }
     }
 
-    return _react2['default'].createElement(
-      'td',
-      { className: this.cx({ element: 'Date', modifiers: bemModifiers, states: bemStates }),
-        style: cellStyle,
-        onTouchStart: this.touchStart,
-        onMouseEnter: this.mouseEnter,
-        onMouseLeave: this.mouseLeave,
-        onMouseDown: this.mouseDown },
-      numStates > 1 && _react2['default'].createElement(
-        'div',
-        { className: this.cx({ element: "HalfDateStates" }) },
-        _react2['default'].createElement(_CalendarDatePeriod2['default'], { period: 'am', color: amColor }),
-        _react2['default'].createElement(_CalendarDatePeriod2['default'], { period: 'pm', color: pmColor })
-      ),
-      numStates === 1 && _react2['default'].createElement('div', { className: this.cx({ element: "FullDateStates" }), style: style }),
-      _react2['default'].createElement(
-        'span',
-        { className: this.cx({ element: "DateLabel" }) },
-        date.format('D')
-      ),
-      selectionModifier ? _react2['default'].createElement(_CalendarSelection2['default'], { modifier: selectionModifier, pending: pending }) : null,
-      highlightModifier ? _react2['default'].createElement(_CalendarHighlight2['default'], { modifier: highlightModifier }) : null
+    return (
+      <td className={this.cx({element: 'Date', modifiers: bemModifiers, states: bemStates})}
+        style={cellStyle}
+        onTouchStart={this.touchStart}
+        onMouseEnter={this.mouseEnter}
+        onMouseLeave={this.mouseLeave}
+        onMouseDown={this.mouseDown}>
+        {(numStates > 1 && !this.props.fullDayStates) &&
+          <div className={this.cx({element: "HalfDateStates"})}>
+            <CalendarDatePeriod period="am" color={amColor} />
+            <CalendarDatePeriod period="pm" color={pmColor} />
+          </div>}
+        {numStates === 1 &&
+          <div className={this.cx({element: "FullDateStates"})} style={style} />}
+        <span className={this.cx({element: "DateLabel"})}>{date.format('D')}</span>
+        {selectionModifier ? <CalendarSelection modifier={selectionModifier} pending={pending} /> : null}
+        {highlightModifier ? <CalendarHighlight modifier={highlightModifier} /> : null}
+      </td>
     );
-  }
+  },
 });
 
-exports['default'] = CalendarDate;
-module.exports = exports['default'];
+export default CalendarDate;

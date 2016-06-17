@@ -1,55 +1,41 @@
-'use strict';
+import moment from 'moment';
+import {} from 'moment-range';
+import isMomentRange from './isMomentRange';
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _moment2 = require('moment');
-
-var _moment3 = _interopRequireDefault(_moment2);
-
-require('moment-range');
-
-var _isMomentRange = require('./isMomentRange');
-
-var _isMomentRange2 = _interopRequireDefault(_isMomentRange);
-
-exports['default'] = {
-  momentOrMomentRange: function momentOrMomentRange(props, propName) {
-    var val = props[propName];
+export default {
+  momentOrMomentRange(props, propName) {
+    let val = props[propName];
 
     if (!val) {
       return null;
-    } else if (_moment3['default'].isMoment(val)) {
+    } else if (moment.isMoment(val)) {
       return null;
-    } else if ((0, _isMomentRange2['default'])(val)) {
+    } else if (isMomentRange(val)) {
       return null;
     }
-    return new Error('\'' + propName + '\' must be a moment or a moment range');
+    return new Error(`'${propName}' must be a moment or a moment range`);
   },
 
-  moment: function moment(props, propName) {
-    var val = props[propName];
+  moment(props, propName) {
+    let val = props[propName];
 
     if (!val) {
       return null;
-    } else if (_moment3['default'].isMoment(val)) {
+    } else if (moment.isMoment(val)) {
       return null;
     }
-    return new Error('\'' + propName + '\' must be a moment');
+    return new Error(`'${propName}' must be a moment`);
   },
 
-  momentRange: function momentRange(props, propName) {
-    var val = props[propName];
+  momentRange(props, propName) {
+    let val = props[propName];
 
     if (!val) {
       return null;
-    } else if ((0, _isMomentRange2['default'])(val)) {
+    } else if (isMomentRange(val)) {
       return null;
     }
-    return new Error('\'' + propName + '\' must be a moment range');
-  }
+    return new Error(`'${propName}' must be a moment range`);
+  },
 };
-module.exports = exports['default'];

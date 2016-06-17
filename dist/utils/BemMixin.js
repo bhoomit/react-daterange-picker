@@ -1,45 +1,31 @@
-'use strict';
+import React from 'react';
+import bemCx from './bemCx';
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _bemCx = require('./bemCx');
-
-var _bemCx2 = _interopRequireDefault(_bemCx);
-
-var BemMixin = {
+const BemMixin = {
   propTypes: {
-    bemNamespace: _react2['default'].PropTypes.string,
-    bemBlock: _react2['default'].PropTypes.string
+    bemNamespace: React.PropTypes.string,
+    bemBlock: React.PropTypes.string,
   },
 
   contextTypes: {
-    bemNamespace: _react2['default'].PropTypes.string,
-    bemBlock: _react2['default'].PropTypes.string
+    bemNamespace: React.PropTypes.string,
+    bemBlock: React.PropTypes.string,
   },
 
   childContextTypes: {
-    bemNamespace: _react2['default'].PropTypes.string,
-    bemBlock: _react2['default'].PropTypes.string
+    bemNamespace: React.PropTypes.string,
+    bemBlock: React.PropTypes.string,
   },
 
-  getChildContext: function getChildContext() {
+  getChildContext() {
     return {
       bemNamespace: this.getBemNamespace(),
-      bemBlock: this.getBemBlock()
+      bemBlock: this.getBemBlock(),
     };
   },
 
-  getBemNamespace: function getBemNamespace() {
+  getBemNamespace() {
     if (this.props.bemNamespace) {
       return this.props.bemNamespace;
     }
@@ -49,7 +35,7 @@ var BemMixin = {
     return null;
   },
 
-  getBemBlock: function getBemBlock() {
+  getBemBlock() {
     if (this.props.bemBlock) {
       return this.props.bemBlock;
     }
@@ -59,19 +45,16 @@ var BemMixin = {
     return null;
   },
 
-  cx: function cx() {
-    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var opts = {
+  cx(options = {}) {
+    let opts = {
       namespace: this.getBemNamespace(),
       element: this.constructor.displayName,
-      block: this.getBemBlock()
+      block: this.getBemBlock(),
     };
 
-    _extends(opts, options);
-    return (0, _bemCx2['default'])(opts);
-  }
+    Object.assign(opts, options);
+    return bemCx(opts);
+  },
 };
 
-exports['default'] = BemMixin;
-module.exports = exports['default'];
+export default BemMixin;

@@ -49,7 +49,7 @@ const webpackConfig = {
         test: /\.jsx|.js$/,
         exclude: /node_modules\//,
         loaders: [
-          'babel-loader?stage=1&plugins[]=object-assign',
+          'babel-loader',
         ],
       },
     ],
@@ -113,10 +113,6 @@ gulp.task('clean-dist', function() {
 gulp.task('build-dist-js', function() {
   // build javascript files
   return gulp.src(['src/**/*.{js,jsx}', '!src/**/tests/**', '!src/tests.webpack.js'])
-    .pipe(plugins.babel({
-      stage: 1,
-      plugins: ['object-assign'],
-    }))
     .pipe(plugins.extReplace('.js'))
     .pipe(gulp.dest('dist'));
 });
@@ -149,10 +145,7 @@ gulp.task('watch-example-js', function() {
 
 gulp.task('build-example', function() {
   // setup babel hook
-  require("babel/register")({
-    stage: 1,
-    plugins: ['object-assign'],
-  });
+  require("babel-register")();
 
   var Index = React.createFactory(require('./example/base.jsx'));
   var markup = '<!document html>' + React.renderToString(Index());

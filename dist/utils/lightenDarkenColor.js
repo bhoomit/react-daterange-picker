@@ -1,16 +1,9 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = lightenDarkenColor;
-
-function lightenDarkenColor(col, amt) {
-  var usePound = false;
-  var num = undefined;
-  var r = undefined;
-  var b = undefined;
-  var g = undefined;
+export default function lightenDarkenColor(col, amt) {
+  let usePound = false;
+  let num;
+  let r;
+  let b;
+  let g;
 
   if (col[0] === "#") {
     col = col.slice(1);
@@ -27,7 +20,7 @@ function lightenDarkenColor(col, amt) {
     r = 0;
   }
 
-  b = (num >> 8 & 0x00FF) + amt;
+  b = ((num >> 8) & 0x00FF) + amt;
 
   if (b > 255) {
     b = 255;
@@ -43,7 +36,5 @@ function lightenDarkenColor(col, amt) {
     g = 0;
   }
 
-  return (usePound ? "#" : "") + (g | b << 8 | r << 16).toString(16);
+  return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
 }
-
-module.exports = exports["default"];
