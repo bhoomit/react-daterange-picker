@@ -321,6 +321,7 @@ var DateRangePicker = _react2.default.createClass({
         this.completeRangeSelection();
       } else if (!this.isDateDisabled(date) && this.isDateSelectable(date)) {
         this.startRangeSelection(date);
+        this.highlightRange(_moment2.default.range(date, date));
         if (this.props.singleDateRange) {
           this.highlightRange(_moment2.default.range(date, date));
         }

@@ -280,6 +280,7 @@ const DateRangePicker = React.createClass({
         this.completeRangeSelection();
       } else if (!this.isDateDisabled(date) && this.isDateSelectable(date)) {
         this.startRangeSelection(date);
+        this.highlightRange(moment.range(date, date));
         if (this.props.singleDateRange) {
           this.highlightRange(moment.range(date, date));
         }
